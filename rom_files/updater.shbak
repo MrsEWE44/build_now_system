@@ -1,0 +1,28 @@
+LOG_FILE="/sdcard/updater_ss.log"
+OUTDIR="/sdcard/out"
+BASE_FILE_NAME="/sdcard/miui_lime.zip"
+if [ -f "$BASE_FILE_NAME" ]
+then
+	rm -rf $OUTDIR >> $LOG_FILE 2>&1
+	mkdir $OUTDIR >> $LOG_FILE 2>&1
+	busybox	unzip "$BASE_FILE_NAME" -d  "$OUTDIR" >> $LOG_FILE 2>&1
+	if [ -f "$OUTDIR/system/super.img" ]
+	then
+		simg2img "$OUTDIR/system/super.img" /dev/block/bootdevice/by-name/super >> $LOG_FILE 2>&1
+	else
+		NOSUPER=("system" "vendor" "system_ext" "product")
+		for nnn in ${NOSUPER[*]}
+		do
+			if [ -f "$OUTDIR/system/${nnn}.img" ];then simg2img "$OUTDIR/system/${nnn}.img" "/dev/block/bootdevice/by-name/$nnn" >> $LOG_FILE 2>&1;fi
+		done
+	fi
+	
+	busybox cp "$OUTDIR/data/magisk.apk" /sdcard/ >> $LOG_FILE 2>&1
+	busybox cp "$OUTDIR/data/startupsystem.sh" /sdcard/ >> $LOG_FILE 2>&1
+	busybox cp "$OUTDIR/data/mt.apk" /sdcard/ >> $LOG_FILE 2>&1
+	busybox cp "$OUTDIR/data/AndroidOnCDROM.sh" /sdcard/ >> $LOG_FILE 2>&1
+	rm -rf $OUTDIR >> $LOG_FILE 2>&1
+fi
+
+
+

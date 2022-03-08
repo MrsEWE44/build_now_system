@@ -1,0 +1,9 @@
+ota-property-files=metadata:69:300         
+ota-required-cache=0
+ota-type=BLOCK
+post-build=Redmi/lime/lime:11/RKQ1.201004.002/V12.5.5.0.RJQCNXM:user/release-keys
+post-build-incremental=V12.5.5.0.RJQCNXM
+post-sdk-level=30
+post-security-patch-level=2021-10-01
+post-timestamp=1637515148
+pre-device=lime

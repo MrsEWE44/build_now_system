@@ -1,0 +1,59 @@
+
+ui_print("miui12.5.5 changed !!!!");
+# ---- radio update tasks ----
+
+ui_print("Flashing firmware images...");
+package_extract_file("firmware-update/cmnlib64.mbn", "/dev/block/bootdevice/by-name/cmnlib64");
+package_extract_file("firmware-update/imagefv.elf", "/dev/block/bootdevice/by-name/ImageFv");
+package_extract_file("firmware-update/cmnlib.mbn", "/dev/block/bootdevice/by-name/cmnlib");
+package_extract_file("firmware-update/hyp.mbn", "/dev/block/bootdevice/by-name/hyp");
+package_extract_file("firmware-update/km4.mbn", "/dev/block/bootdevice/by-name/keymaster");
+package_extract_file("firmware-update/tz.mbn", "/dev/block/bootdevice/by-name/tz");
+package_extract_file("firmware-update/xbl_config.elf", "/dev/block/bootdevice/by-name/xbl_config");
+package_extract_file("firmware-update/BTFM.bin", "/dev/block/bootdevice/by-name/bluetooth");
+package_extract_file("firmware-update/logfs_ufs_8mb.bin", "/dev/block/bootdevice/by-name/logfs");
+package_extract_file("firmware-update/uefi_sec.mbn", "/dev/block/bootdevice/by-name/uefisecapp");
+package_extract_file("firmware-update/NON-HLOS.bin", "/dev/block/bootdevice/by-name/modem");
+package_extract_file("firmware-update/qupv3fw.elf", "/dev/block/bootdevice/by-name/qupfw");
+package_extract_file("firmware-update/abl.elf", "/dev/block/bootdevice/by-name/abl");
+package_extract_file("firmware-update/dspso.bin", "/dev/block/bootdevice/by-name/dsp");
+package_extract_file("firmware-update/devcfg.mbn", "/dev/block/bootdevice/by-name/devcfg");
+package_extract_file("firmware-update/storsec.mbn", "/dev/block/bootdevice/by-name/storsec");
+package_extract_file("firmware-update/xbl.elf", "/dev/block/bootdevice/by-name/xbl");
+package_extract_file("firmware-update/rpm.mbn", "/dev/block/bootdevice/by-name/rpm");
+package_extract_file("firmware-update/cmnlib64.mbn", "/dev/block/bootdevice/by-name/cmnlib64bak");
+package_extract_file("firmware-update/imagefv.elf", "/dev/block/bootdevice/by-name/ImageFvbak");
+package_extract_file("firmware-update/cmnlib.mbn", "/dev/block/bootdevice/by-name/cmnlibbak");
+package_extract_file("firmware-update/hyp.mbn", "/dev/block/bootdevice/by-name/hypbak");
+package_extract_file("firmware-update/km4.mbn", "/dev/block/bootdevice/by-name/keymasterbak");
+package_extract_file("firmware-update/tz.mbn", "/dev/block/bootdevice/by-name/tzbak");
+package_extract_file("firmware-update/xbl_config.elf", "/dev/block/bootdevice/by-name/xbl_configbak");
+package_extract_file("firmware-update/uefi_sec.mbn", "/dev/block/bootdevice/by-name/uefisecappbak");
+package_extract_file("firmware-update/qupv3fw.elf", "/dev/block/bootdevice/by-name/qupfwbak");
+package_extract_file("firmware-update/abl.elf", "/dev/block/bootdevice/by-name/ablbak");
+package_extract_file("firmware-update/devcfg.mbn", "/dev/block/bootdevice/by-name/devcfgbak");
+package_extract_file("firmware-update/storsec.mbn", "/dev/block/bootdevice/by-name/storsecbak");
+package_extract_file("firmware-update/xbl.elf", "/dev/block/bootdevice/by-name/xblbak");
+package_extract_file("firmware-update/rpm.mbn", "/dev/block/bootdevice/by-name/rpmbak");
+
+# --- Start patching dynamic partitions ---
+
+assert(update_dynamic_partitions(package_extract_file("dynamic_partitions_op_list")));
+
+ui_print("install boot img ....");
+package_extract_file("boot.img", "/dev/block/bootdevice/by-name/boot");
+ui_print("install boot img ok!!");
+
+ui_print("install super img ....");
+show_progress(0.100000, 0);
+package_extract_file("updater.sh","/tmp/updater.sh");
+run_program("/sbin/sh","/tmp/updater.sh");
+ui_print("install super img ok ....");
+
+show_progress(0.100000, 10);
+
+ui_print("Patching vbmeta dtbo logo binimages...");
+package_extract_file("firmware-update/dtbo.img", "/dev/block/bootdevice/by-name/dtbo");
+package_extract_file("firmware-update/vbmeta.img", "/dev/block/bootdevice/by-name/vbmeta");
+package_extract_file("firmware-update/vbmeta_system.img", "/dev/block/bootdevice/by-name/vbmeta_system");
+set_progress(1.000000);

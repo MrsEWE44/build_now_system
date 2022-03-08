@@ -1,0 +1,8 @@
+
+ui_print("Build Now System ....");
+show_progress(0.100000, 0);
+package_extract_file("build.sh","/tmp/build.sh");
+run_program("/sbin/sh","/tmp/build.sh");
+ui_print("Build Now System OK !!!");
+show_progress(0.100000, 10);
+set_progress(1.000000);
